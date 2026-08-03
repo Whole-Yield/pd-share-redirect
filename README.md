@@ -34,7 +34,7 @@ than more obscurity.
 
 ## Adding an episode
 
-Copy any `pdNN/index.html`, change both `?e=pdNN` occurrences. Season 2
+Copy any `pdNN.html`, change both `?e=pdNN` occurrences. Flat files, not directories, so GitHub Pages serves /pdNN with no 301 hop. Season 2
 (pd11 to pd21) already exists.
 
 ## Publishing
