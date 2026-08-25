@@ -1,32 +1,26 @@
 <!-- drafted by wy-claudify using claude-haiku-4-5-20251001; review before trusting -->
-# share.perfumeddecay.com
+# CLAUDE.md
 
-Static GitHub Pages redirect site for Perfumed Decay Season 2 episode share links. Each `/pdNN` path counts clicks before redirecting to pod.link. The root and 404 pages are deliberately inert to avoid triggering certificate scanners.
+## What this is
+Static GitHub Pages site serving per-episode share links for Perfumed Decay podcast. Each path `/pdNN` redirects through a click counter to the actual pod.link URL. **Critical:** the root and 404 page are deliberately inert to avoid triggering certificate-transparency scanners; never make them redirect.
 
-## How to run it
+## How to deploy
+Push to `main` branch. GitHub Pages deploys automatically to `share.perfumeddecay.com` via CNAME. Custom domain is set in GitHub Pages settings; if TLS certificate is stuck "not requested", remove and re-add the custom domain setting.
 
-GitHub Pages handles this automatically. Deploy by pushing to `main` branch. Domain is configured via CNAME file (`share.perfumeddecay.com`) and DNS (Namecheap CNAME to `whole-yield.github.io`).
-
-## How to test it
-
-No test command found in this repo. Verify manually: `/pdNN` paths should hit the counter on the 1070 with `?e=pdNN` parameter before redirecting to pod.link. The root `/` and `/404.html` must never reach the counter.
+## Test files
+No test files found in this repo.
 
 ## Layout
-
-- `pdNN.html` (pd11-pd21): flat HTML files serving as `/pdNN` paths. Each contains two `?e=pdNN` references that must be changed when copying to a new episode.
-- `index.html`: root page, deliberately inert with links only.
-- `404.html`: error page, deliberately inert.
-- `CNAME`: holds `share.perfumeddecay.com`.
-
-## Critical: Root and 404 must never redirect
-
-Root redirects trigger Certificate Transparency scanners within minutes. They spoof user agents and pollute click counts. Only `/pdNN` paths hit the counter.
+- `index.html`, `404.html`: static pages, must not redirect to counter (defeats cert-log scanners)
+- `pdNN.html` (pd11 through pd21): episode redirect files
+- `CNAME`: points to `whole-yield.github.io`
+- DNS at Namecheap: `share` CNAME to `whole-yield.github.io`; apex rows point to Transistor (do not touch)
 
 ## Adding an episode
+1. Copy any existing `pdNN.html`
+2. Change both `?e=pdNN` query parameters to the new episode number
+3. Use flat filename (no directory), so GitHub Pages serves `/pdXX` directly without a 301 hop
 
-Copy an existing `pdNN.html`, rename it (e.g., `pd22.html`), and change both `?e=pdNN` occurrences to `?e=pd22`. Files must be flat (no subdirectories) so GitHub Pages serves them without a 301 hop.
-
-## Deployment gotchas
-
-- GitHub only requests a TLS certificate when the custom domain is SET. If stuck at "not requested", remove the custom domain in settings and re-add it.
-- Re-PUTting the same CNAME value is a no-op; only adding/removing triggers a cert request.
+## Critical gotchas
+- Root must never redirect: scanners learn hostname from Certificate Transparency logs and probe within minutes with spoofed user agents. On 2026-08-03, root redirect logged 7 "unique" non-humans in under an hour. The root and 404 are inert to humans by design.
+- Paths like `/pdNN` are printed in show notes and RSS; once published they are not secret. If click counts spike without organic sharing, suspect crawler following the published feed, not cert-log scanning.
