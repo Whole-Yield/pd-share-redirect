@@ -37,6 +37,16 @@ than more obscurity.
 Copy any `pdNN.html`, change both `?e=pdNN` occurrences. Flat files, not directories, so GitHub Pages serves /pdNN with no 301 hop. Season 2
 (pd11 to pd21) already exists.
 
+## /latest (the Instagram bio link)
+
+`/latest` lists the most recent Instagram reels, newest first, each opening its full
+episode on YouTube at the exact second the clip came from. The Instagram bio holds this
+one link, because Instagram only lets bio links be edited in the phone app. The page is
+rebuilt once a day by `reels_loop/bio_page.py --publish` (a reel scheduled later that day
+is in the page but hidden until its time). It never touches the click counter, so the
+root rule above does not apply to it. If no build lands for 36 hours the page says it may
+be out of date and points at perfumeddecay.com.
+
 ## Publishing
 
 GitHub Pages, `main` / root. `CNAME` holds `share.perfumeddecay.com`. DNS is a
